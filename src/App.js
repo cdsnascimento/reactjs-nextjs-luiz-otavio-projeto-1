@@ -4,7 +4,8 @@ import { Component } from 'react';
 
 class App extends Component {
   state = {
-      post: [
+      counter: 0,
+      posts: [
         {
           id: 1,
           title: 'O título 1',
@@ -23,18 +24,39 @@ class App extends Component {
       ]
     };
 
+    componentDidMount(){
+      this.handleTimeout();
+    }
+
+    componentDidUpdate(){
+      this.handleTimeout();
+    }
+
+    componentWillUnmount(){
+      clearTimeout(this.timeoutUpdate);
+    }
+
+    handleTimeout=() => {
+      const {posts, counter} = this.state;
+      posts[0].title = 'O título mudou';
+
+      setTimeout(() =>{
+        this.setState({posts, counter: counter + 1});
+      }, 1000);
+    }
+
   render() {
 
-    const { post }= this.state;
+    const { posts, counter } = this.state;
 
     return (
       <div className="App">
-        {post.map(post => (
+        <h1>{counter}</h1>
+        {posts.map(post => (
           <div key={post.id}>
             <h1>{post.title}</h1>
             <p>{post.body}</p>
           </div>
-          
         ))}
       </div>
     );
